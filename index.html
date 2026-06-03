@@ -164,13 +164,13 @@ const CONTRACT_ABI = [
      const amountWei = ethers.parseUnits(amount, 6); 
      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
       const desc = document.getElementById("invoiceDesc").value || "Pagamento via ArcInvoice"; 
-     await contract.createInvoice(RECIPIENT, amountWei, desc);
+     await contract.createInvoice(userAddress, amountWei, desc);
 
       const params = new URLSearchParams();
       params.set("pay", "1");
       params.set("amount", amount);
       params.set("desc", desc);
-      params.set("to", RECIPIENT);
+      params.set("to",userAddress);
 
       const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
 
@@ -178,7 +178,7 @@ const CONTRACT_ABI = [
         <div class="text-left">
           <p class="text-5xl font-bold text-emerald-600">${amount} USDC</p>
           <p class="mt-4 text-xl">${desc}</p>
-          <p class="text-xs text-zinc-500 mt-8">Receber em: ${RECIPIENT.slice(0,8)}...${RECIPIENT.slice(-6)}</p>
+          <p class="text-xs text-zinc-500 mt-8">Receber em: ${userAddress.slice(0,8)}...${userAddress.slice(-6)}</p>
         </div>`;
       
       document.getElementById("previewContent").innerHTML = previewHTML;

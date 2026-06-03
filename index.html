@@ -215,7 +215,27 @@ const CONTRACT_ADDRESS = "0xdf461afE5af5c1e390dE949fBAA172717f974690";
 
 
 async function loadInvoice() {
-alert("teste");
+const readProvider = new ethers.BrowserProvider(window.ethereum);
+const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+ const invoice = await contract.invoices(1);
+  const amountUSDC = ethers.formatUnits(invoice.amount, 6);
+
+  document.getElementById("invoiceData").innerHTML = `
+  <div class="space-y-3 text-sm">
+    <p><strong>Invoice ID:</strong> ${invoice.id.toString()}</p>
+    <p><strong>Creator:</strong> ${invoice.creator.slice(0, 8)}...${invoice.creator.slice(-6)}</p>
+    <p><strong>Receiver:</strong> ${invoice.receiver.slice(0, 8)}...${invoice.receiver.slice(-6)}</p>
+    <p><strong>Amount:</strong> ${amountUSDC} USDC</p>
+    <p><strong>Description:</strong> ${invoice.description}</p>
+    <p><strong>Status:</strong> ${invoice.paid ? "Paid" : "Unpaid"}</p>
+    <p>
+      <a href="https://testnet.arcscan.app/address/${CONTRACT_ADDRESS}" target="_blank" class="text-emerald-400 underline">
+        View contract on ArcScan
+      </a>
+    </p>
+  </div>
+`;
+  
 }
 
     

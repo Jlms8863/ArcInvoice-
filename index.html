@@ -129,17 +129,16 @@ const CONTRACT_ABI = [
   }
 
   try {
+const accounts = await window.ethereum.request({
+  method: 'eth_requestAccounts'
+});
 
-    await window.ethereum.request({
-      method: 'eth_requestAccounts'
-    });
+userAddress = accounts[0];
 
-    provider = new ethers.BrowserProvider(window.ethereum);
+provider = new ethers.BrowserProvider(window.ethereum);
 
-    signer = await provider.getSigner();
-
-    userAddress = await signer.getAddress();
-
+signer = await provider.getSigner();
+    
     document.getElementById("connectBtn").innerHTML =
       "Connected: " +
       userAddress.slice(0,6) +

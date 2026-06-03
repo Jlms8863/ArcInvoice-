@@ -114,7 +114,11 @@
     let provider, signer, userAddress;
     const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
     const RECIPIENT = "0x7EDAF8FbF5C4f765e96B2151c1a88096931269A3"; // ← TROCA OBRIGATÓRIO
-const CONTRACT_ADDRESS = "0xdf461afE5af5c1e390dE949fBAA172717f974690";
+const CONTRACT_ADDRESS = "0xdf461afE5af5c1e390dE949fBAA172717f974690"; 
+
+    const CONTRACT_ABI = [
+  "function invoices(uint256) view returns (uint256 id, address creator, address receiver, uint256 amount, string description, bool paid)"
+];
     async function connectWallet() {
 
   if (!window.ethereum) {
@@ -211,10 +215,7 @@ const CONTRACT_ADDRESS = "0xdf461afE5af5c1e390dE949fBAA172717f974690";
 
 
 async function loadInvoice() {
-
-  document.getElementById("invoiceData").innerHTML =
-    "Invoice #1 encontrada no contrato ArcInvoice.";
-
+alert("teste");
 }
 
     

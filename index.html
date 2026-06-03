@@ -78,6 +78,22 @@
     </div>
 
     <!-- POR QUE ARC -->
+   <div class="mt-16 bg-zinc-900 rounded-3xl p-8">
+  <h3 class="text-2xl font-bold arc-green mb-6">
+    Última Invoice On-Chain
+  </h3>
+
+  <div id="invoiceData">
+    Clique em carregar invoice.
+  </div>
+
+  <button
+    onclick="loadInvoice()"
+    class="mt-6 bg-emerald-500 hover:bg-emerald-600 text-black px-6 py-3 rounded-2xl font-semibold"
+  >
+    Carregar Invoice
+  </button>
+</div>
     <div class="mt-16 bg-zinc-900 rounded-3xl p-8">
       <h3 class="text-2xl font-bold arc-green mb-6">Por que ArcInvoice na Arc L1?</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
@@ -98,7 +114,7 @@
     let provider, signer, userAddress;
     const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
     const RECIPIENT = "0x7EDAF8FbF5C4f765e96B2151c1a88096931269A3"; // ← TROCA OBRIGATÓRIO
-
+const CONTRACT_ADDRESS = "0xdf461afE5af5c1e390dE949fBAA172717f974690";
     async function connectWallet() {
 
   if (!window.ethereum) {
@@ -192,6 +208,16 @@
           <p class="text-zinc-400 mt-4">${params.get("desc")}</p>`;
       }
     };
+
+
+async function loadInvoice() {
+
+  document.getElementById("invoiceData").innerHTML =
+    "Invoice #1 encontrada no contrato ArcInvoice.";
+
+}
+
+    
   </script>
 </body>
 </html>

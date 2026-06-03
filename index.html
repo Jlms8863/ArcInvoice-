@@ -116,7 +116,8 @@
     const RECIPIENT = "0x7EDAF8FbF5C4f765e96B2151c1a88096931269A3"; // ← TROCA OBRIGATÓRIO
 const CONTRACT_ADDRESS = "0xdf461afE5af5c1e390dE949fBAA172717f974690"; 
 const CONTRACT_ABI = [
-  "function createInvoice(address,uint256,string)",
+  "function createInvoice(address,uint256,string)", 
+  "function markAsPaid(uint256)",
   "function invoiceCount() view returns (uint256)",
   "function invoices(uint256) view returns (uint256 id, address creator, address receiver, uint256 amount, string description, bool paid)"
 ];
@@ -153,7 +154,6 @@ signer = await provider.getSigner();
 
   }
 }
-
    async  function generateInvoice() { 
      if (!signer) {
   alert("Conecte a wallet primeiro!");
@@ -163,9 +163,14 @@ signer = await provider.getSigner();
      const amountWei = ethers.parseUnits(amount, 6); 
      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
       const desc = document.getElementById("invoiceDesc").value || "Pagamento via ArcInvoice"; 
-     await contract.createInvoice(userAddress, amountWei, desc);
+   
+const createTx = await contract.createInvoice(userAddress, amountWei, desc);
 
-      const params = new URLSearchParams();
+await createTx.wait();
+      const params = new URLSearchParams(); 
+     const invoiceId = await contract.invoiceCount();
+
+params.set("invoiceId", invoiceId.toString());
       params.set("pay", "1");
       params.set("amount", amount);
       params.set("desc", desc);
@@ -191,7 +196,9 @@ signer = await provider.getSigner();
     async function payInvoice() {
       const params = new URLSearchParams(window.location.search);
       const amount = params.get("amount");
-      const to = params.get("to");
+      const to = params.get("to"); 
+
+      const invoiceId = params.get("invoiceId");
 
       if (!signer) return alert("Conecte a wallet primeiro!");
 
@@ -203,6 +210,11 @@ signer = await provider.getSigner();
         const status = document.getElementById("payStatus");
         status.innerHTML = `⏳ Enviando Tx: ${tx.hash.slice(0,12)}...`;
         await tx.wait();
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+const paidTx = await contract.markAsPaid(invoiceId);
+
+await paidTx.wait();
         status.innerHTML = `✅ Pago! <a href="https://testnet.arcscan.app/tx/${tx.hash}" target="_blank" class="underline">Ver no explorer</a>`;
       } catch (e) {
         alert("Erro: " + (e.shortMessage || e.message));
